@@ -1,0 +1,9 @@
+{
+  "name": "YouTube Playlist Project",
+  "short_name": "App",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "description": "Placeholder manifest",
+  "icons": []
+}

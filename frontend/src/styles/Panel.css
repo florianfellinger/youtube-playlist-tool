@@ -1,0 +1,5 @@
+.Panel {
+    background-color: rgba(176, 176, 176, 0.65);
+    display: flex;
+    margin: 10px 0 10px 0;
+}

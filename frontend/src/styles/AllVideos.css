@@ -1,0 +1,7 @@
+.AllVideos {
+    background-color: aliceblue;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: 10px 0 10px 0;
+}

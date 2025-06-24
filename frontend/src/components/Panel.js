@@ -1,0 +1,18 @@
+import PlaylistInfo from "./PlaylistInfo"
+import PlaylistInput from "./PlaylistInput"
+
+import '../styles/Panel.css'
+
+/**
+ * display the contents of the top panel (above all videos)
+ */
+const Panel = () => {
+    return (
+        <div className="Panel">
+            <PlaylistInput />
+            <PlaylistInfo />
+        </div>
+    )
+}
+
+export default Panel

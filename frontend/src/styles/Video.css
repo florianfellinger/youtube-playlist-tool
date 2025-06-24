@@ -1,0 +1,56 @@
+.Video {
+    background-color: bisque;
+    display: flex;
+    border-radius: 4px;
+    overflow: hidden;
+    gap: 5px;
+}
+
+.left-side {
+    background-color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    .position {
+        color: azure;
+    }
+}
+
+.middle-side {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    .middle-top {
+        display: flex;
+        height: 70%;
+        .title {
+            
+        }
+    }
+    .middle-bottom {
+        display: flex;
+        .channelTitle {
+
+        }
+    }
+}
+
+.right-side {
+    background-color: dimgrey;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    .duration {
+        color: azure;
+    }
+}
+
+.title {
+    font-size: larger;
+}
+
+.channelTitle {
+    font-size: small;
+}

@@ -1,0 +1,8 @@
+html, body {
+  margin: 0;
+}
+
+.pages {
+  padding-top: 60px; /* needs to be same height as Navbar */
+  margin: 0 25px 0 25px;
+}

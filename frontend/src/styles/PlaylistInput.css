@@ -1,0 +1,56 @@
+.PlaylistInput {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin: 10px;
+}
+
+.input-container {
+    background-color: aliceblue;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.input-container-error {
+    background-color: aliceblue;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    > input {
+        border-color: red;
+    }
+    .errorText {
+        color: red;
+    }
+}
+
+.buttons {
+    background-color: aliceblue;
+    display: flex;
+}
+
+.sync_button {
+    background-color: rgb(95, 109, 220);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 3px;
+    border-style: hidden;
+    width: 200px;
+    height: 40px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.deleteAll_button {
+    background-color: red;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 3px;
+    border-style: hidden;
+    width: 130px;
+    height: 40px;
+    cursor: pointer;
+}
