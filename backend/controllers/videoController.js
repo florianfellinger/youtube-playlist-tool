@@ -33,7 +33,7 @@ const createVideo = async (req, res) => {
         const video = await Video.create(req.body)
         res.status(200).json(video)
     } catch (error) {
-        res.status(400).json({error: error.message})
+        res.status(400).json({ error: error.message })
     }
 }
 

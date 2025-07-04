@@ -5,7 +5,7 @@ import { useVideoContext } from "../hooks/useVideoContext"
 import '../styles/PlaylistInput.css'
 
 const PlaylistInput = () => {
-    const { fetchVideos, deleteAllVideos, syncVideosFromPlaylist } = useVideoContext()
+    const { deleteAllVideos, syncVideosFromPlaylist } = useVideoContext()
     const [playlistId, setPlaylistId] = useState("") // sample playlistId: PLuMvKcrkir3D2K99cXm1kchsdhyVqgngk
     const [playlistIdInputError, setPlaylistIdInputError] = useState("")
 
@@ -31,7 +31,22 @@ const PlaylistInput = () => {
      * (_testing method_)
      */
     const handleTest = async () => {
-        await fetchVideos()
+
+        const videoId = "t3Qoz_ZCrL0"
+        const id = "PLuMvKcrkir3D2K99cXm1kchsdhyVqgngk"
+
+        await fetch('http://localhost:4000/api/youtube', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ playlistId: id, videoId: videoId }),
+            credentials: 'include'
+        })
+    }
+
+    const handleGoogleLogin = () => {
+        window.location.href = 'http://localhost:4000/api/auth/google'
     }
 
     return (
@@ -53,6 +68,9 @@ const PlaylistInput = () => {
                 <div className="sync_button" onClick={loadVideosFromPlaylist}><p>Synchronize Videos from Playlist</p></div>
                 <div className="deleteAll_button" onClick={handleDeleteAllVideos}><p>Clear all</p></div>
             </div>
+
+            <button onClick={handleTest}>TEST</button>
+            <button onClick={handleGoogleLogin}>Login to Google</button>
 
         </div>
     )

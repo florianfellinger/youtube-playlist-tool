@@ -41,6 +41,7 @@ export const VideoContextProvider = ({ children }) => {
     // total video duration as context state in Iso format (pass it down to components instead of every component calculating it on their own)
     const [totalDuration, setTotalDuration] = useState("")
 
+    // recalculate totalDuration when videos state changes
     useEffect(() => {
         calculateTotalVideoDuration()
     }, [videos])
@@ -50,6 +51,7 @@ export const VideoContextProvider = ({ children }) => {
      * @param apiKey key of the YouTube Data API
      * @param playlistId id of playlist to fetch the videos from
      * @returns all videos in the given playlist as a JSON, or throws an error in case of an error
+     * @author maybe move this function to services
      */
     const fetchVideosByPlaylistFromYoutubeAPI = async (apiKey, playlistId) => {
         try {
@@ -99,6 +101,7 @@ export const VideoContextProvider = ({ children }) => {
      * GET details from videos
      * @param apiKey key of the YouTube Data API
      * @returns details of each video in 'videos' state, or null in case of an error
+     * @author maybe move this function to services
      */
     const fetchVideosDetailsFromYoutubeAPI = async (apiKey, videosJSON) => {
         const videoIds = videosJSON.map(video => video.videoId)
@@ -148,14 +151,12 @@ export const VideoContextProvider = ({ children }) => {
     const postVideosToDatabase = async (rawVideosJSON) => {
         // Handling of which fields to push:
         const videosJSON = extractJSONFields(rawVideosJSON.items)
-        console.log("VIDEOS JSON LENGHT", videosJSON.length)
-        console.log("VIDEOS JSON", videosJSON)
+
         // check if payload is too large -> split payload into smaller arrays
         const videosJSONChunks = []
         if (videosJSON.length > 200) {
             for (let i = 0; i < videosJSON.length; i += 200) {
                 videosJSONChunks.push(videosJSON.slice(i, i + 200))
-                console.log("VJC", videosJSONChunks)
             }
         } else {
             videosJSONChunks.push(videosJSON)
@@ -334,6 +335,9 @@ export const VideoContextProvider = ({ children }) => {
         ))
     }
 
+    /**
+     * calculates the duration of all videos in the videos state and sets the state totalDuration accordingly
+     */
     const calculateTotalVideoDuration = () => {
         const total = videos.videos.reduce((sum, video) => sum + convertISOToSeconds(video.duration), 0)
 
