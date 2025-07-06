@@ -1,0 +1,19 @@
+.input-container {
+    background-color: aliceblue;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.input-container-error {
+    background-color: aliceblue;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    > input {
+        border-color: red;
+    }
+    .errorText {
+        color: red;
+    }
+}

@@ -1,0 +1,11 @@
+.Header {
+    background-color: rgb(56, 56, 56);
+    display: flex;
+    position: fixed;
+    gap: 20px;
+    align-items: center;
+    justify-content: space-between;
+    width: calc(100% - 10px); /* 100% - 2 * padding */
+    height: 50px;
+    padding: 5px;
+}

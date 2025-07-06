@@ -25,9 +25,25 @@ app.use(cors({
 
 // Middleware
 app.use(express.json())
-app.use(session({ secret: 'cats', resave: false, saveUninitialized: true }));
+app.use(session({ 
+    secret: 'cats', 
+    resave: false, 
+    saveUninitialized: false,
+    cookie: {
+        httpOnly: true,
+        secure: false,          // nur für `localhost`, in Produktion auf `true`
+        sameSite: 'lax'         // wichtig für Cookie bei Cross-Origin GET/POST
+    } 
+}));
 app.use(passport.initialize())
 app.use(passport.session())
+//test middleware
+app.use((req, res, next) => {
+  console.log("SESSION ID:", req.sessionID);
+  console.log("SESSION:", req.session);
+  console.log("USER:", req.user);
+  next();
+});
 
 // Routes
 app.use('/api/videos', videosRoutes)

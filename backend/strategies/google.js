@@ -21,6 +21,7 @@ passport.use(
         console.log("PROFILE OF LOGGED IN USER:", profile)
         const user = {
             username: profile.displayName,
+            profilePicture: profile.photos[0].value,
             accessToken
         }
         done(null, user)

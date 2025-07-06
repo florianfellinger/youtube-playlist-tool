@@ -3,6 +3,7 @@ html, body {
 }
 
 .pages {
-  padding-top: 60px; /* needs to be same height as Navbar */
+  padding-top: 60px; /* needs to be same height + 2 x padding as Header */
   margin: 0 25px 0 25px;
 }
+

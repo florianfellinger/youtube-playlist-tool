@@ -1,0 +1,14 @@
+.PlaylistEdit {
+    background-color: aqua;
+    display: flex;
+    height: 100%;
+}
+
+.inputs-container {
+    height: 100%;
+}
+
+.insert_button {
+    background-color: brown;
+    cursor: pointer;
+}

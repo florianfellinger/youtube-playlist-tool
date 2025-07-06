@@ -1,0 +1,47 @@
+.LoginBar {
+    background-color: antiquewhite;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    gap: 10px;
+}
+
+.profileImage-container {
+    height: 100%;
+    width: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+
+    img {
+        height: 100%;
+        width: 100%;
+    }
+}
+
+
+.googleLogin-button {
+    background-color: rgb(248, 255, 241);
+    display: flex;
+    align-items: center;
+    border-radius: 20px;
+    gap: 3px;
+    height: 70%;
+    cursor: pointer;
+    border: none;
+    
+    .googleImage-container {
+        height: 25px;
+        width: 25px;
+
+        img {
+            height: 100%;
+            width: 100%;
+        }
+    }
+}
+
+.googleLogin-button:hover {
+    background-color: aqua;
+}
+
+

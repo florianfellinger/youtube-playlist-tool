@@ -1,5 +1,6 @@
 import PlaylistInfo from "./PlaylistInfo"
 import PlaylistInput from "./PlaylistInput"
+import PlaylistEdit from "./PlaylistEdit"
 
 import '../styles/Panel.css'
 
@@ -10,7 +11,8 @@ const Panel = () => {
     return (
         <div className="Panel">
             <PlaylistInput />
-            <PlaylistInfo />
+            
+            <PlaylistEdit />
         </div>
     )
 }

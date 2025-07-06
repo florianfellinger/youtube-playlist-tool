@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useVideoContext } from "../hooks/useVideoContext"
 
 import '../styles/PlaylistInput.css'
+import '../styles/styles_InputFields.css'
 
 const PlaylistInput = () => {
     const { deleteAllVideos, syncVideosFromPlaylist } = useVideoContext()
@@ -31,22 +32,16 @@ const PlaylistInput = () => {
      * (_testing method_)
      */
     const handleTest = async () => {
-
-        const videoId = "t3Qoz_ZCrL0"
-        const id = "PLuMvKcrkir3D2K99cXm1kchsdhyVqgngk"
-
-        await fetch('http://localhost:4000/api/youtube', {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ playlistId: id, videoId: videoId }),
-            credentials: 'include'
+        console.log("retrieving photo...")
+        const response = await fetch('http://localhost:4000/api/userData/profilePicture', {
+            method: "GET",
+            credentials: "include"
         })
-    }
 
-    const handleGoogleLogin = () => {
-        window.location.href = 'http://localhost:4000/api/auth/google'
+        if (response.ok) {
+            const jsonResponse = await response.json()
+            console.log(jsonResponse.profilePicture)
+        }
     }
 
     return (
@@ -70,7 +65,6 @@ const PlaylistInput = () => {
             </div>
 
             <button onClick={handleTest}>TEST</button>
-            <button onClick={handleGoogleLogin}>Login to Google</button>
 
         </div>
     )

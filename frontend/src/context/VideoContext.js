@@ -1,6 +1,6 @@
 import { createContext, useEffect, useReducer, useState } from "react"
 
-import { convertISOToSeconds, convertIsoDurationToMMSS, convertSecondsToIso } from "../utils/videoUtils"
+import { convertISOToSeconds, convertSecondsToIso } from "../utils/videoUtils"
 
 export const VideoContext = createContext()
 
@@ -38,11 +38,14 @@ export const VideoContextProvider = ({ children }) => {
     // states to share across all objects:
     // videos is an object, containing a property "videos" (an array), which contains data-objects of all videos
     const [videos, dispatch] = useReducer(videoReducer, { videos: [] })
+    // total number of videos in videos state
+    const [numberOfVideos, setNumberOfVideos] = useState(0)
     // total video duration as context state in Iso format (pass it down to components instead of every component calculating it on their own)
     const [totalDuration, setTotalDuration] = useState("")
 
-    // recalculate totalDuration when videos state changes
+    // recalculate states when videos state changes
     useEffect(() => {
+        setNumberOfVideos(videos.videos.length)
         calculateTotalVideoDuration()
     }, [videos])
 
@@ -305,7 +308,7 @@ export const VideoContextProvider = ({ children }) => {
     }
 
 
-    // HELPERMETHODS
+    // HELPER METHODS
     /**
      * extracts only the necessary fields of a JSON to store in the database.
      * @param jsonData as in https://developers.google.com/youtube/v3/docs/playlistItems/list?hl=de (for part=snippet)
@@ -359,6 +362,7 @@ export const VideoContextProvider = ({ children }) => {
         fetchVideosDetailsFromYoutubeAPI,
         deleteAllVideos,
         syncVideosFromPlaylist,
+        numberOfVideos,
         totalDuration
         }}>
             { children }

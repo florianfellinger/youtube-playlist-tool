@@ -1,7 +1,7 @@
 // POST video to playlist
 const addVideoToPlaylist = async (req, res) => {
     const accessToken = req.user.accessToken
-    const { videoId, playlistId } = req.body
+    const { videoId, playlistId, position } = req.body
 
     console.log("VIDEO ID", videoId)
     console.log("PLAYLIST ID", playlistId)
@@ -21,7 +21,7 @@ const addVideoToPlaylist = async (req, res) => {
                         kind: 'youtube#video',
                         videoId: videoId
                     },
-                    position: 0
+                    position: position
                 }
             })
         })
