@@ -11,8 +11,8 @@ const Panel = () => {
     return (
         <div className="Panel">
             <PlaylistInput />
+            <PlaylistInfo />
             
-            <PlaylistEdit />
         </div>
     )
 }

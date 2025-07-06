@@ -2,17 +2,13 @@ import '../styles/AllVideos.css'
 
 import Video from "./Video"
 
-import { useEffect } from "react"
-
 import { useVideoContext } from "../hooks/useVideoContext"
 
 const AllVideos = () => {
 
-    const { videos, fetchVideos } = useVideoContext()
+    const { videos } = useVideoContext()
 
-    useEffect(() => {
-        fetchVideos()
-    }, [])
+    console.log("VIDEOS", videos)
 
     const renderAllVideos = () => {
         return videos.map((video) => {

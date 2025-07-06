@@ -42,6 +42,13 @@ export const VideoContextProvider = ({ children }) => {
     const [numberOfVideos, setNumberOfVideos] = useState(0)
     // total video duration as context state in Iso format (pass it down to components instead of every component calculating it on their own)
     const [totalDuration, setTotalDuration] = useState("")
+    // current playlist that is has been retrieved (used to fill out some fields for video insert/delete, as the user likely wants to edit this playlist)
+    const [currentPlaylistId, setCurrentPlalyistId] = useState("")
+
+    // fetch all videos to store them in state, such that components only call videos state to access videos data
+    useEffect(() => {
+        fetchVideos()
+    }, [])
 
     // recalculate states when videos state changes
     useEffect(() => {
@@ -87,7 +94,7 @@ export const VideoContextProvider = ({ children }) => {
                     }
                 }
 
-                console.log("FINAL JSON RESPONSE", finalJsonResponse)
+                setCurrentPlalyistId(playlistId)
                 return finalJsonResponse
             // Error handling
             } else {
@@ -293,7 +300,7 @@ export const VideoContextProvider = ({ children }) => {
         try {
             const rawVideosJSON = await fetchVideosByPlaylistFromYoutubeAPI(apiKey, playlistId)
 
-            // only keep on with deleting etc. if fetchVideosByPlaylistFromYoutubeAPI doesn't throws an error (e.g. due to wrong playlistId)
+            // only keep on with deleting etc. if fetchVideosByPlaylistFromYoutubeAPI doesn't throw an error (e.g. due to wrong playlistId)
             await deleteAllVideosNoStateChange()
             await postVideosToDatabase(rawVideosJSON)
             const videosJSON = await fetchVideosNoStateChange()
@@ -311,7 +318,7 @@ export const VideoContextProvider = ({ children }) => {
     // HELPER METHODS
     /**
      * extracts only the necessary fields of a JSON to store in the database.
-     * @param jsonData as in https://developers.google.com/youtube/v3/docs/playlistItems/list?hl=de (for part=snippet)
+     * @param jsonData as in https://developers.google.com/youtube/v3/docs/playlistItems/list (for part=snippet)
      */
     const extractJSONFields = (jsonData) => {
         return jsonData.map(item => (
@@ -363,7 +370,8 @@ export const VideoContextProvider = ({ children }) => {
         deleteAllVideos,
         syncVideosFromPlaylist,
         numberOfVideos,
-        totalDuration
+        totalDuration,
+        currentPlaylistId
         }}>
             { children }
         </VideoContext.Provider>

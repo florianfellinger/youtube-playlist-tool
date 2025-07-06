@@ -4,14 +4,17 @@ import './styles/index.css';
 import App from './App';
 import { VideoContextProvider } from './context/VideoContext';
 import { UserContextProvider } from './context/UserContext';
+import { PlaylistContextProvider } from './context/PlaylistContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <UserContextProvider>
-      <VideoContextProvider>
-        <App />
-      </VideoContextProvider>
+      <PlaylistContextProvider>
+        <VideoContextProvider>
+          <App />
+        </VideoContextProvider>
+      </PlaylistContextProvider>
     </UserContextProvider>
   </React.StrictMode>
 );

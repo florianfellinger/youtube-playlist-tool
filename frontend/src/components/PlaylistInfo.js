@@ -3,12 +3,16 @@ import '../styles/PlaylistInfo.css'
 import { convertIsoDurationToMMSS, convertISOToSeconds, convertSecondsToIso, convertIsoToDHHMMSS } from "../utils/videoUtils"
 
 import { useVideoContext } from "../hooks/useVideoContext"
+import { usePlaylistContext } from '../hooks/usePlaylistContext'
 
 const PlaylistInfo = () => {
     const { totalDuration, videos } = useVideoContext()
+    const { playlists } = usePlaylistContext()
 
     return (
         <div className="PlaylistInfo">
+            <p>Loaded Playlist: </p>
+            <p>{playlists[0] && playlists[0].title}</p>
             <p># Videos</p>
             <p>{videos.length}</p>
             <p>Total Duration: </p>

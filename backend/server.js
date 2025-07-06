@@ -9,6 +9,7 @@ const cors = require('cors')
 
 // import routes
 const videosRoutes = require('./routes/videos')
+const playlistsRoutes = require('./routes/playlists')
 const authRoutes = require('./routes/auth')
 const youtubeRoutes = require('./routes/youtube')
 
@@ -47,6 +48,7 @@ app.use((req, res, next) => {
 
 // Routes
 app.use('/api/videos', videosRoutes)
+app.use('/api/playlists', playlistsRoutes)
 app.use('/api/auth', authRoutes)
 app.use('/api/youtube', youtubeRoutes)
 

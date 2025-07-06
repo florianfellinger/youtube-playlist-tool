@@ -1,12 +1,14 @@
 import { useState } from 'react'
 
 import { useVideoContext } from "../hooks/useVideoContext"
+import { usePlaylistContext } from '../hooks/usePlaylistContext'
 
 import '../styles/PlaylistInput.css'
 import '../styles/styles_InputFields.css'
 
 const PlaylistInput = () => {
-    const { deleteAllVideos, syncVideosFromPlaylist } = useVideoContext()
+    const { deleteAllVideos, syncVideosFromPlaylist, currentPlaylistId } = useVideoContext()
+    const { syncPlaylists } = usePlaylistContext()
     const [playlistId, setPlaylistId] = useState("") // sample playlistId: PLuMvKcrkir3D2K99cXm1kchsdhyVqgngk
     const [playlistIdInputError, setPlaylistIdInputError] = useState("")
 
@@ -18,6 +20,8 @@ const PlaylistInput = () => {
             setPlaylistIdInputError("Enter a playlist Id")
         } else {
             await syncVideosFromPlaylist("AIzaSyD06cPOcOwE-6skqd7WSdQMhk6BaC0iwgk", playlistId)
+            // also load the playlist object of the given playlistId
+            await syncPlaylists("AIzaSyD06cPOcOwE-6skqd7WSdQMhk6BaC0iwgk", playlistId)
         }
     }
 
@@ -46,6 +50,8 @@ const PlaylistInput = () => {
 
     return (
         <div className="PlaylistInput">
+
+            <div className='currentPlaylist'>{`${currentPlaylistId}`}</div>
 
             <div className={playlistIdInputError ? 'input-container-error' : 'input-container'}>
                  <input
