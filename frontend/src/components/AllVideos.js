@@ -8,8 +8,6 @@ const AllVideos = () => {
 
     const { videos } = useVideoContext()
 
-    console.log("VIDEOS", videos)
-
     const renderAllVideos = () => {
         return videos.map((video) => {
             return (

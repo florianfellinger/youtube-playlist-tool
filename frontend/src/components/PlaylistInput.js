@@ -7,8 +7,8 @@ import '../styles/PlaylistInput.css'
 import '../styles/styles_InputFields.css'
 
 const PlaylistInput = () => {
-    const { deleteAllVideos, syncVideosFromPlaylist, currentPlaylistId } = useVideoContext()
-    const { syncPlaylists } = usePlaylistContext()
+    const { syncVideosFromPlaylist, deleteAllVideos } = useVideoContext()
+    const { syncPlaylists, fetchMetadataByPlaylistId } = usePlaylistContext()
     const [playlistId, setPlaylistId] = useState("") // sample playlistId: PLuMvKcrkir3D2K99cXm1kchsdhyVqgngk
     const [playlistIdInputError, setPlaylistIdInputError] = useState("")
 
@@ -19,7 +19,8 @@ const PlaylistInput = () => {
         if (playlistId === "") {
             setPlaylistIdInputError("Enter a playlist Id")
         } else {
-            await syncVideosFromPlaylist("AIzaSyD06cPOcOwE-6skqd7WSdQMhk6BaC0iwgk", playlistId)
+            const metadata = await syncVideosFromPlaylist("AIzaSyD06cPOcOwE-6skqd7WSdQMhk6BaC0iwgk", playlistId)
+            console.log("M", metadata)
             // also load the playlist object of the given playlistId
             await syncPlaylists("AIzaSyD06cPOcOwE-6skqd7WSdQMhk6BaC0iwgk", playlistId)
         }
@@ -36,22 +37,12 @@ const PlaylistInput = () => {
      * (_testing method_)
      */
     const handleTest = async () => {
-        console.log("retrieving photo...")
-        const response = await fetch('http://localhost:4000/api/userData/profilePicture', {
-            method: "GET",
-            credentials: "include"
-        })
-
-        if (response.ok) {
-            const jsonResponse = await response.json()
-            console.log(jsonResponse.profilePicture)
-        }
+        const res = await fetchMetadataByPlaylistId("PLuMvKcrkir3CNo7SBkscQeiYn27MYxoKZ")
+        console.log("res", res)
     }
 
     return (
         <div className="PlaylistInput">
-
-            <div className='currentPlaylist'>{`${currentPlaylistId}`}</div>
 
             <div className={playlistIdInputError ? 'input-container-error' : 'input-container'}>
                  <input
@@ -67,7 +58,7 @@ const PlaylistInput = () => {
            
             <div className='buttons'>
                 <div className="sync_button" onClick={loadVideosFromPlaylist}><p>Synchronize Videos from Playlist</p></div>
-                <div className="deleteAll_button" onClick={handleDeleteAllVideos}><p>Clear all</p></div>
+                {/*<div className="deleteAll_button" onClick={handleDeleteAllVideos}><p>Clear all</p></div>*/}
             </div>
 
             <button onClick={handleTest}>TEST</button>

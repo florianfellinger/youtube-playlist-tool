@@ -10,8 +10,6 @@ export const UserContextProvider = ({ children }) => {
     // image url of the user's profile picture
     const [profilePicture, setProfilePicture] = useState("")
 
-    console.log("CONTEXT", profilePicture)
-
     /*
     useEffect(() => {
         getProfilePicture()

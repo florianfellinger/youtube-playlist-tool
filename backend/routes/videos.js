@@ -1,6 +1,7 @@
 const express = require('express')
 const { 
     getAllVideos,
+    getAllVideosByPlaylistId,
     getVideoById,
     createVideo,
     createManyVideos,
@@ -13,6 +14,9 @@ const router = express.Router()
 
 // GET all videos
 router.get('/', getAllVideos)
+
+// GET all videos by playlistId
+router.get('/:playlistId', getAllVideosByPlaylistId)
 
 // GET video by ObjectId
 router.get('/:objectId', getVideoById)

@@ -1,6 +1,6 @@
 import { createContext, useEffect, useReducer, useState } from "react"
 
-import { convertISOToSeconds, convertSecondsToIso } from "../utils/videoUtils"
+import { convertISOToSeconds, convertSecondsToIso, calculateTotalVideoDuration } from "../utils/videoUtils"
 
 export const VideoContext = createContext()
 
@@ -36,24 +36,19 @@ export const videoReducer = (state, action) => {
 
 export const VideoContextProvider = ({ children }) => {
     // states to share across all objects:
-    // videos is an object, containing a property "videos" (an array), which contains data-objects of all videos
+    // videos is an object, containing a property "videos" (an array), which contains data-objects of a selection of videos
     const [videos, dispatch] = useReducer(videoReducer, { videos: [] })
     // total number of videos in videos state
     const [numberOfVideos, setNumberOfVideos] = useState(0)
     // total video duration as context state in Iso format (pass it down to components instead of every component calculating it on their own)
     const [totalDuration, setTotalDuration] = useState("")
-    // current playlist that is has been retrieved (used to fill out some fields for video insert/delete, as the user likely wants to edit this playlist)
-    const [currentPlaylistId, setCurrentPlalyistId] = useState("")
 
-    // fetch all videos to store them in state, such that components only call videos state to access videos data
-    useEffect(() => {
-        fetchVideos()
-    }, [])
+    console.log("VIDEOS", videos)
 
     // recalculate states when videos state changes
     useEffect(() => {
         setNumberOfVideos(videos.videos.length)
-        calculateTotalVideoDuration()
+        calculateTotalDuration()
     }, [videos])
 
     /**
@@ -94,7 +89,6 @@ export const VideoContextProvider = ({ children }) => {
                     }
                 }
 
-                setCurrentPlalyistId(playlistId)
                 return finalJsonResponse
             // Error handling
             } else {
@@ -212,6 +206,7 @@ export const VideoContextProvider = ({ children }) => {
     /**
      * GET all videos from database and store them in videos state
      */
+    /*
     const fetchVideos = async () => {
         try {
             const response = await fetch('/api/videos', {
@@ -227,12 +222,14 @@ export const VideoContextProvider = ({ children }) => {
             console.error("Error fetching videos:", error)
         }
     }
+*/
 
     /**
      * GET all videos from database, but returning the data instead of changing the 'videos' state
      * This method is useful if an operation just needs all videos from the database to perform further operations on them.
      * @returns all videos in the database, or null in case of an error
      */
+    /*
     const fetchVideosNoStateChange = async () => {
         try {
             const response = await fetch('/api/videos', {
@@ -247,6 +244,32 @@ export const VideoContextProvider = ({ children }) => {
         } catch (error) {
             console.error("Error fetching videos:", error)
             return null
+        }
+    }
+    */
+
+    const fetchVideosByPlaylist = async (playlistId) => {
+        try {
+            const response = await fetch(`/api/videos/${playlistId}`)
+            if (response.ok) {
+                const jsonResponse = await response.json()
+                console.log("response", jsonResponse)
+                dispatch({ type: "SET_VIDEOS", payload: jsonResponse })
+            }
+        } catch (err) {
+            console.error("Error fetching videos for playlist", err);
+        }
+    }
+
+    const fetchVideosByPlaylistNoStateChange = async (playlistId) => {
+        try {
+            const response = await fetch(`/api/videos/${playlistId}`)
+            if (response.ok) {
+                const jsonResponse = await response.json()
+                return jsonResponse
+            }
+        } catch (err) {
+            console.error("Error fetching videos for playlist", err);
         }
     }
 
@@ -295,25 +318,21 @@ export const VideoContextProvider = ({ children }) => {
      * 5) update the state of 'videos'
      * @param {*} apiKey key of the YouTube Data API
      * @param {*} playlistId id of a playlist
+     * @returns object containing metadata of the fetched playlist's content
      */
     const syncVideosFromPlaylist = async (apiKey, playlistId) => {
         try {
             const rawVideosJSON = await fetchVideosByPlaylistFromYoutubeAPI(apiKey, playlistId)
-
-            // only keep on with deleting etc. if fetchVideosByPlaylistFromYoutubeAPI doesn't throw an error (e.g. due to wrong playlistId)
-            await deleteAllVideosNoStateChange()
             await postVideosToDatabase(rawVideosJSON)
-            const videosJSON = await fetchVideosNoStateChange()
-            console.log("VIDEOS JSON", videosJSON)
+            const videosJSON = await fetchVideosByPlaylistNoStateChange(playlistId)
             const rawVideosDetailsJSON = await fetchVideosDetailsFromYoutubeAPI(apiKey, videosJSON)
             await updateVideosInDatabase(rawVideosDetailsJSON)
-            await fetchVideos()
+            await fetchVideosByPlaylist(playlistId)
         } catch (error) {
             console.error(`An error occured while trying to sync with given playlist ${playlistId}`, error.message)
             alert(`An error occured while trying to sync with given playlist "${playlistId}":\n ${error.message}`)
         }
     }
-
 
     // HELPER METHODS
     /**
@@ -348,7 +367,7 @@ export const VideoContextProvider = ({ children }) => {
     /**
      * calculates the duration of all videos in the videos state and sets the state totalDuration accordingly
      */
-    const calculateTotalVideoDuration = () => {
+    const calculateTotalDuration = () => {
         const total = videos.videos.reduce((sum, video) => sum + convertISOToSeconds(video.duration), 0)
 
         // parse the total duration back MMSS format
@@ -365,13 +384,12 @@ export const VideoContextProvider = ({ children }) => {
         fetchVideosByPlaylistFromYoutubeAPI,
         postVideosToDatabase,
         updateVideosInDatabase,
-        fetchVideos,
         fetchVideosDetailsFromYoutubeAPI,
         deleteAllVideos,
         syncVideosFromPlaylist,
+        fetchVideosByPlaylist,
         numberOfVideos,
-        totalDuration,
-        currentPlaylistId
+        totalDuration
         }}>
             { children }
         </VideoContext.Provider>

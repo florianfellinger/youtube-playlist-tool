@@ -8,6 +8,15 @@ const getAllVideos = async (req, res) => {
     res.status(200).json(videos)
 }
 
+// GET all videos by playlistId
+const getAllVideosByPlaylistId = async (req, res) => {
+    const { playlistId } = req.params
+
+    const videos = await Video.find({ playlistId: playlistId })
+
+    res.status(200).json(videos)
+}
+
 // GET video by ObjectId
 const getVideoById = async (req, res) => {
     const { objectId } = req.params
@@ -63,7 +72,7 @@ const updateManyVideos = async (req, res) => {
 
     try {
         const operations = videosData.map(video => ({
-            updateOne: {
+            updateMany: {
                 filter: { videoId: video.videoId },
                 update: { $set: { duration: video.duration } }
             }
@@ -105,6 +114,7 @@ const deleteVideoById = async (req, res) => {
 
 module.exports = {
     getAllVideos,
+    getAllVideosByPlaylistId,
     getVideoById,
     createVideo,
     createManyVideos,

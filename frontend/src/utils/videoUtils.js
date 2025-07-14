@@ -69,3 +69,17 @@ export const convertIsoToDHHMMSS = (duration) => {
 
     return `${days} Days, ${hours} Hours, ${minutes} Minutes, ${seconds} Seconds`
 }
+
+/**
+* calculates the duration of all videos given as argument
+* @param videos array containing videos object; each video needs to contain a field "duration" in ISO format
+* @returns total duration in ISO format
+*/
+export const calculateTotalVideoDuration = (videos) => {
+    const total = videos.reduce((sum, video) => sum + convertISOToSeconds(video.duration), 0)
+
+    // parse the total duration back MMSS format
+    const totalISO = convertSecondsToIso(total)
+
+    return totalISO
+}

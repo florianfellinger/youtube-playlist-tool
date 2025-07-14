@@ -1,20 +1,29 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 import '../styles/PlaylistEdit.css'
 import '../styles/styles_InputFields.css'
 
 import { useVideoContext } from "../hooks/useVideoContext"
+import { usePlaylistContext } from "../hooks/usePlaylistContext"
 
 const PlaylistEdit = () => {
     const { numberOfVideos } = useVideoContext()
+    const { currentPlaylistId } = usePlaylistContext()
     // input states
-    const [playlistId, setPlaylistId] = useState("")
+    const [playlistIdInput, setPlaylistIdInput] = useState("")
     const [videoId, setVideoId] = useState("")
     const [position, setPosition] = useState(1)
     // corresponding error states
     const [playlistIdInputError, setPlaylistIdInputError] = useState("")
     const [videoIdInputError, setVideoIdInputError] = useState("")
     const [positionInputError, setPositionInputError] = useState("")
+
+    console.log("PLAYLISTID: ", currentPlaylistId)
+    console.log("PLAYLISTIDINOUT: ", playlistIdInput)
+
+    useEffect(() => {
+        setPlaylistIdInput(currentPlaylistId)
+    }, [currentPlaylistId])
 
     /**
      * insert the video into the playlist, at a certain position. All values are from this component's state
@@ -25,7 +34,7 @@ const PlaylistEdit = () => {
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ playlistId: playlistId, videoId: videoId, position: position - 1 }),
+            body: JSON.stringify({ playlistId: playlistIdInput, videoId: videoId, position: position - 1 }),
             credentials: 'include'
         })
     }
@@ -39,7 +48,7 @@ const PlaylistEdit = () => {
         setPositionInputError("")
         let error = false
 
-        if (!playlistId) {
+        if (!playlistIdInput) {
             setPlaylistIdInputError("Enter a Playlist-ID");
             error = true
         }
@@ -66,8 +75,8 @@ const PlaylistEdit = () => {
                         className='input'
                         type="text"
                         placeholder="enter Playlist-ID"
-                        value={playlistId}
-                        onChange={(e) => setPlaylistId(e.target.value)}
+                        value={playlistIdInput}
+                        onChange={(e) => setPlaylistIdInput(e.target.value)}
                     />
 
                     <div className='errorText'>{playlistIdInputError}</div>
